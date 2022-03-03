@@ -1,5 +1,5 @@
 ---
-title: "Workshop3 - RMarkdown"
+title: "Workshop3 - RMarkdown and Workshop4 - Data Wrangling"
 author: "Cornelia van Niekerk"
 date: '2022-03-01'
 output: html_document
@@ -7,45 +7,42 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
 ```
 
-##### R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-[link](https://github.com/rstudio/cheatsheets/blob/main/rmarkdown-2.0.pdf)
-
-include some calculation:
-
-
-
+### Data Wrangling
 
 ```{r}
+survey<-read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-05-18/survey.csv")
 
-2+2*6
+country<-survey%>%
+  distinct(country)
+
+survey%>%count(country, sort=TRUE)
+survey_short<-survey%>%
+  filter(
+    country=="United States" |
+      country=="USA" | 
+      country=="US" | 
+      country=="U.S." | 
+      country=="United States of America" |
+      country=="Usa"
+    )
+
+
+
+survey_short%>%filter(
+  annual_salary>50000 &
+    gender=="Woman"
+  
+)
+survey_short%>%
+  select(how_old_are_you, industry, annual_salary, gender)%>%
+  filter(gender=="Woman")
 
 ```
 
 
-```{r}
-# to create a coding block:Command+Option+i
-```
-```{r}
 
-```
 
-When you click the ***Knit*** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
